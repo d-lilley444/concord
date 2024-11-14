@@ -4,5 +4,8 @@
 {% endblock %}
 
 {% block content %}
-    <h1>welcome user </h1>
+    {% if loggedin_user %}
+        <h1>welcome {{loggedin_user.username}}</h1>
+
+    {% endif %}
 {% endblock %}

@@ -166,9 +166,20 @@ def unauthorized_handler():
     return redirect(url_for('login'))
 
 
-
-
 @app.route("/")
 def index():
     return render_template ("index.html")
+
+@app.route("landing")
+def landing():
+
+    loggedin = None
+
+    if flask_login.current_user.is_authenticated:
+        loggedin = flask_login.current_user
+
+        #get the servers they are a part of 
+
+        return render_template("profile_landing.html",loggedin_user = loggedin)
+
 
