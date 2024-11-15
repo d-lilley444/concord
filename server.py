@@ -113,9 +113,7 @@ def signup():
         #probably need other checks here ??
 
         return redirect(url_for('login'))
-
-    #chect the posted info
-
+    
 
 @app.route("/login",methods = ['GET','POST'])
 def login():
