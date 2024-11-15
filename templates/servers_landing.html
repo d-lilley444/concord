@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}
-    Landing
+    Servers
 {% endblock %}
 
 {% block content %}
@@ -8,5 +8,8 @@
         <h1>welcome {{loggedin_user.username}}</h1>
 
     {% endif %}
-    <a href="{{url_for('servers')}}">View servers</a>
+
+    <a href="{{url_for('createServer')}}">Create server</a>
+
+
 {% endblock %}

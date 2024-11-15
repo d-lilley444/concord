@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}
+    Create Server
+{% endblock %}
+
+{% block content %}
+    <form action="create_server" method="post">
+        <label for="server-name">Name:</label>
+        <input type="text" name="server-name" id="server-name">
+        <br>
+        <label for="server-pass">Password:</label>
+        <input type="text" name="server-pass" id="server-pass">
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+
+{% endblock %}

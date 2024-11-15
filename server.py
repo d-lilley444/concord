@@ -3,6 +3,7 @@ import sqlite3
 import json
 import hashlib
 import flask_login
+import uuid
 
 app = Flask(__name__)
 
@@ -149,7 +150,7 @@ def login():
             user.email = user_info['email']
 
             flask_login.login_user(user)
-            return redirect(url_for('profile'))
+            return redirect(url_for('landing'))
 
     else:
         return render_template("login.html")
@@ -170,7 +171,7 @@ def unauthorized_handler():
 def index():
     return render_template ("index.html")
 
-@app.route("landing")
+@app.route("/landing")
 def landing():
 
     loggedin = None
@@ -181,5 +182,54 @@ def landing():
         #get the servers they are a part of 
 
         return render_template("profile_landing.html",loggedin_user = loggedin)
+    else:
+        return render_template("login.html")
+
+##SERVERS landing page 
+
+@app.route("/servers",methods=['GET','POST'])
+@flask_login.login_required
+def servers():
+    loggedin = None
+
+    if flask_login.current_user.is_authenticated:
+        loggedin = flask_login.current_user
+
+    ##allow the user to create a server ? 
+        return render_template("servers_landing.html",loggedin_user = loggedin)
+    
+
+@app.route("/create_server",methods=['GET','POST'])
+@flask_login.login_required
+def createServer():
+
+    loggedin = None
+
+    if flask_login.current_user.is_authenticated:
+        loggedin = flask_login.current_user
+
+        if request.method == 'GET':
+            return render_template("server_create.html")
+
+        if request.method == 'POST':
+            #get the server info from the form 
+            serverName = request.form.get('server-name')
+            serverPassword = request.form.get('server-pass')
+            servrUUID = str(uuid.uuid4())
+            creatorId = loggedin.id ##may not be this ?
+
+            con = get_db()
+            cur = con.cursor()
+
+            sql = "INSERT INTO servers (name,password,uuid,creator_id) VALUES (?,?,?,?)"
+            values = (serverName,serverPassword,servrUUID,creatorId,)
+            #try catch ??
+            cur.execute(sql,values)
+            con.commit()
+
+            #redirect back to page 
+            return redirect(url_for('servers'))
+
+
 
 
