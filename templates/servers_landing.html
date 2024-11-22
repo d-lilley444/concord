@@ -9,6 +9,11 @@
 
     {% endif %}
     {# get the users related servers #}
+    {% if servers %}
+        {% for server in servers %}
+            {{server['name']}}
+        {% endfor %}
+    {% endif %}
 
     <a href="{{url_for('createServer')}}">Create server</a>
 

@@ -208,7 +208,7 @@ def servers():
         sql = "SELECT * FROM servers WHERE creator_id = ?"
         values = (loggedin.id,)
         cur.execute(sql,values)
-        servers = cur.fetchmany()
+        servers = cur.fetchall()
         for s in servers[0]:
             app.logger.info(f"Servers = {s}")
         con.commit()
