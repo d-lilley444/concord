@@ -197,7 +197,13 @@ def servers():
         con = get_db()
         cur = con.cursor()
 
-        sql = ""
+        sql = "SELECT * FROM servers WHERE creator_id = ?"
+        values = (loggedin.id,)
+        cur.execute(sql,values)
+        servers = cur.fetchmany()
+        for s in servers[0]:
+            app.logger.info(f"Servers = {s}")
+        con.commit()
 
 
     ##allow the user to create a server ? 
