@@ -11,6 +11,11 @@
     </title>
 </head>
 <body>
+    {% block error %}
+        {% if errors %}
+            {{errors}}
+        {% endif %}
+    {% endblock %}
     {% block content %}
         
     {% endblock %}

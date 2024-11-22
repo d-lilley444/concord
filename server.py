@@ -93,6 +93,7 @@ def signup():
 
     if request.method == 'POST':
 
+        #gets the attributes from the form
         email = request.form.get("email")
         username = request.form.get("username")
         password = request.form.get("password")
@@ -136,7 +137,7 @@ def login():
         cur.execute(sql,valaues)
         user_info = cur.fetchone()
 
-        app.logger.info(f"USER LGIN INFO = {user_info[0]}, {user_info[1]}, {user_info[2]}")
+        #app.logger.info(f"USER LGIN INFO = {user_info[0]}, {user_info[1]}, {user_info[2]}")
 
         if user_info == None:
             return render_template("login.html",errors="Soemthing went wrong")
@@ -192,6 +193,12 @@ def servers():
 
     if flask_login.current_user.is_authenticated:
         loggedin = flask_login.current_user
+
+        con = get_db()
+        cur = con.cursor()
+
+        sql = ""
+
 
     ##allow the user to create a server ? 
         return render_template("servers_landing.html",loggedin_user = loggedin)
