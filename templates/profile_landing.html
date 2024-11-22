@@ -6,6 +6,7 @@
 {% block content %}
     {% if loggedin_user %}
         <h1>welcome {{loggedin_user.username}}</h1>
+        <h1>your phone number is  {{loggedin_user.phone}}</h1>
 
     {% endif %}
     <a href="{{url_for('servers')}}">View servers</a>

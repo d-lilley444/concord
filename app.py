@@ -54,6 +54,8 @@ def user_loader(id):
         user.id = info['user_id']
         user.username = info['username']
         user.email = info['email']
+        user.dob = info['dob']
+        user.phone = info['phone']
         return user
     else:
         return None
@@ -97,8 +99,10 @@ def signup():
         email = request.form.get("email")
         username = request.form.get("username")
         password = request.form.get("password")
+        dob = request.form.get("dob")
+        phone = request.form.get("phone-number")
 
-        if email == None or username == None or password == None:
+        if email == None or username == None or password == None or dob == None:
             return render_template("signup.html", errors = "somethings missing")
        
         #hash the password
@@ -107,9 +111,10 @@ def signup():
         con = get_db()
         cur = con.cursor()
 
-        sql = "INSERT INTO users (username,email,hash) VALUES (?,?,?)"
-        valaues = (username,email,hashed.hexdigest())
-        cur.execute(sql,valaues)
+        sql = "INSERT INTO users (username,email,hash,dob,phone) VALUES (?,?,?,?,?)"
+        # sql = "INSERT INTO users (username,email,hash) VALUES ("+username+")"
+        values = (username,email,hashed.hexdigest(),dob,phone)
+        cur.execute(sql,values)
         con.commit()
         #probably need other checks here ??
 
@@ -137,19 +142,22 @@ def login():
         cur.execute(sql,valaues)
         user_info = cur.fetchone()
 
-        #app.logger.info(f"USER LGIN INFO = {user_info[0]}, {user_info[1]}, {user_info[2]}")
-
         if user_info == None:
-            return render_template("login.html",errors="Soemthing went wrong")
+            return render_template("login.html",errors="Soemthing went wrong email blank")
 
-        if hashed.hexdigest() == user_info[3]:
+        if hashed.hexdigest() == user_info['hash']:
             user = User()
             user.id = user_info['user_id']
-            user.username = user_info['username']
-            user.email = user_info['email']
+            # user.username = user_info['username']
+            # user.email = user_info['email']
+            # user.dob = user_info['dob']
+            # user.phone = user_info['phone']
 
             flask_login.login_user(user)
             return redirect(url_for('landing'))
+        else:
+            return render_template("login.html",errors="Soemthing went wrong password")
+
 
     else:
         return render_template("login.html")
@@ -207,7 +215,7 @@ def servers():
 
 
     ##allow the user to create a server ? 
-        return render_template("servers_landing.html",loggedin_user = loggedin)
+        return render_template("servers_landing.html",servers = servers)
     
 
 @app.route("/create_server",methods=['GET','POST'])
@@ -227,7 +235,8 @@ def createServer():
             serverName = request.form.get('server-name')
             serverPassword = request.form.get('server-pass')
             servrUUID = str(uuid.uuid4())
-            creatorId = loggedin.id ##may not be this ?
+            #creatorId = loggedin.id ##may not be this ?
+            creatorId = flask_login.current_user.id
 
             con = get_db()
             cur = con.cursor()

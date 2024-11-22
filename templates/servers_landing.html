@@ -4,8 +4,8 @@
 {% endblock %}
 
 {% block content %}
-    {% if loggedin_user %}
-        <h1>welcome {{loggedin_user.username}}</h1>
+    {% if current_user.is_authenticated %}
+        <h1>welcome {{current_user.username}}</h1>
 
     {% endif %}
     {# get the users related servers #}
