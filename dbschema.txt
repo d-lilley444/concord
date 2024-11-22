@@ -1,0 +1,21 @@
+CREATE TABLE "users" (
+	"user_id"	INTEGER,
+	"email"	TEXT NOT NULL UNIQUE,
+	"username"	TEXT NOT NULL UNIQUE,
+	"hash"	TEXT NOT NULL,
+	"dob"	TEXT,
+	"phone"	TEXT,
+	PRIMARY KEY("user_id" AUTOINCREMENT)
+);
+
+
+CREATE TABLE "servers" (
+	"server_id"	INTEGER,
+	"name"	TEXT NOT NULL,
+	"password"	TEXT NOT NULL,
+	"uuid"	TEXT NOT NULL UNIQUE,
+	"creator_id"	INTEGER,
+	PRIMARY KEY("server_id" AUTOINCREMENT),
+	FOREIGN KEY("creator_id") REFERENCES "users"("user_id") ON DELETE SET NULL ON UPDATE CASCADE
+);
+
